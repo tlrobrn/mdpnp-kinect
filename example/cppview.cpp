@@ -25,7 +25,7 @@
  */
 
 
-#include "libfreenect.hpp"
+#include "includes/libfreenect.hpp"
 #include <pthread.h>
 #include <stdio.h>
 #include <iostream>

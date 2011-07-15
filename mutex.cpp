@@ -33,4 +33,3 @@ Mutex::Lock::Lock(Mutex & mutex) : _mutex(mutex) {
 Mutex::Lock::~Lock() {
     _mutex.unlock();
 }
- 
