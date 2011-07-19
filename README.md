@@ -47,14 +47,14 @@ University of Illinois
 
 6. In the OpenNI, Sensor, and Nite directories, run the install script
 
-    $ cd OpenNI
-    $ sudo ./install.sh
+        $ cd OpenNI
+        $ sudo ./install.sh
 
-    $ cd ../Sensor
-    $ sudo ./install.sh
+        $ cd ../Sensor
+        $ sudo ./install.sh
 
-    $ cd ../Nite
-    $ sudo ./install.sh
+        $ cd ../Nite
+        $ sudo ./install.sh
 
     During the NITE install use the PrimeSense Key: 0KOIk2JeIBYClPWVnMoRKn5cdY4=
 
