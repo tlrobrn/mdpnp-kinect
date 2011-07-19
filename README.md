@@ -20,7 +20,7 @@ University of Illinois
 
 1. Create a base directory for the libraries e.g. kinect
 
-    $ mkdir kinect
+        $ mkdir kinect
 
 2. Download the latest unstable binaries from OpenNI, NITE (OpenNI Middleware), Sensor (OpenNI Hardware), and SensorKinect
 
@@ -36,14 +36,14 @@ University of Illinois
 
 4. Update and install dependencies
 
-    $ sudo apt-get update
-    $ sudo apt-get install mono-complete
-    $ sudo apt-get install libusb-1.0-0-dev
-    $ sudo apt-get install freeglut3-dev
+        $ sudo apt-get update
+        $ sudo apt-get install mono-complete
+        $ sudo apt-get install libusb-1.0-0-dev
+        $ sudo apt-get install freeglut3-dev
 
 5. Create the directory /var/lib/ni
 
-    $ sudo mkdir /var/lib/ni
+        $ sudo mkdir /var/lib/ni
 
 6. In the OpenNI, Sensor, and Nite directories, run the install script
 
@@ -60,8 +60,8 @@ University of Illinois
 
 7. Install SensorKinect
 
-    $ cd ../SensorKinect/Platform/Linux-x86/CreateRedist/
-    $ sudo ./RedistMaker
-    $ cd ../Redist
-    $ sudo ./install.sh
+        $ cd ../SensorKinect/Platform/Linux-x86/CreateRedist/
+        $ sudo ./RedistMaker
+        $ cd ../Redist
+        $ sudo ./install.sh
 
