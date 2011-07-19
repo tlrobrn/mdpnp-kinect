@@ -26,11 +26,9 @@ University of Illinois
 
 2. Download the latest unstable binaries from OpenNI, NITE (OpenNI Middleware), and Sensor (OpenNI Hardware)
 
-[OpenNI Module](http://www.openni.org/downloadfiles/opennimodules/openni-binaries/latest-unstable/160-openni-unstable-build-for-ubuntu-10-10-x86-32-bit-v1-3-2/download)
-
-[NITE OpenNI Middleware Module](http://www.openni.org/downloadfiles/opennimodules/openni-compliant-middleware-binaries/latest-unstable/174-primesense-nite-unstable-build-for-ubuntu-10-10-x86-32-bit-v1-4-1/download)
-
-[Sensor OpenNI Hardware Module](http://www.openni.org/downloadfiles/opennimodules/openni-compliant-hardware-binaries/latest-unstable/167-primesensor-module-unstable-build-for-ubuntu-10-10-x86-32-bit-v5-0-3/download)
+    [OpenNI Module](http://www.openni.org/downloadfiles/opennimodules/openni-binaries/latest-unstable/160-openni-unstable-build-for-ubuntu-10-10-x86-32-bit-v1-3-2/download)
+    [NITE OpenNI Middleware Module](http://www.openni.org/downloadfiles/opennimodules/openni-compliant-middleware-binaries/latest-unstable/174-primesense-nite-unstable-build-for-ubuntu-10-10-x86-32-bit-v1-4-1/download)
+    [Sensor OpenNI Hardware Module](http://www.openni.org/downloadfiles/opennimodules/openni-compliant-hardware-binaries/latest-unstable/167-primesensor-module-unstable-build-for-ubuntu-10-10-x86-32-bit-v5-0-3/download)
 
 3. Unpack the archives into OpenNI, Nite, and Sensor folders within the base kinect directory
 
