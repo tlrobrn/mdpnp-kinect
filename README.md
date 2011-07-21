@@ -3,6 +3,10 @@
 Taylor O'Brien
 University of Illinois
 
+## System ##
+
+Ubuntu 11.04 Linux-x86 (32-bit)
+
 ## Dependencies ##
 
 + mono-complete
@@ -17,6 +21,8 @@ University of Illinois
 + SensorKinect [https://github.com/avin2/SensorKinect](https://github.com/avin2/SensorKinect)
 
 ## Setup Instructions ##
+
+These instructions are for Ubuntu, but they should work verbatim for any Linux platform that uses apt (untested).
 
 1. Create a base directory for the libraries e.g. kinect
 
