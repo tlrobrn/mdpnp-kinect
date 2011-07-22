@@ -16,10 +16,6 @@
 //-------------------------------------------------------------------------------
 //	Includes
 //-------------------------------------------------------------------------------
-#include <XnOpenNI.h>
-#include <XnTypes.h>
-#include <XnOS.h>
-#include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
 
 //-------------------------------------------------------------------------------
@@ -28,34 +24,13 @@
 enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 
 //-------------------------------------------------------------------------------
-//	Globals
-//-------------------------------------------------------------------------------
-xn::Context			_context;
-xn::ScriptNode		_scriptNode;
-xn::DepthGenerator	_depthGenerator;
-xn::UserGenerator	_userGenerator;
-xn::Player			_patient;
-
-XnBool	_needPose		= FALSE;
-XnChar	_strPose[20]	= "";
-XnBool	_drawBackground	= TRUE;
-XnBool	_drawPixels		= TRUE;
-XnBool	_drawSkeleton	= TRUE;
-XnBool	_printID		= TRUE;
-XnBool	_printState		= TRUE;
-XnBool	_pause			= FALSE;
-XnBool	_record			= FALSE;
-XnBool	_quit			= FALSE;
-
-Position	_current	= UNKNOWN;
-Position	_previous	= UNKNOWN;
-
-//-------------------------------------------------------------------------------
 //	Functions
 //-------------------------------------------------------------------------------
 void CleanupExit();
 void LoadCalibration(XnUserID user);
 Position getPosition(XnUserID user);
+void getPositionString(XnUserID user, char *posStr);
+
 
 /* Callbacks */
 void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, 
