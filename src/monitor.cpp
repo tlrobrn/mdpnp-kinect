@@ -19,9 +19,7 @@
 #include <XnOS.h>
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
-
 #include <GL/glut.h>
-
 #include "../includes/monitor.h"
 
 // Use OpenNI's xn namespace
@@ -160,10 +158,10 @@ void XN_CALLBACK_TYPE User_NewUser(UserGenerator& generator,
 void XN_CALLBACK_TYPE User_LostUser(UserGenerator& generator,
 	XnUserID nId, void* pCookie) {
 	// User has exited the scene
-	printf("Person lost.\tID: %d\n", nId);
+	printf("Person lost.\t\tID: %d\n", nId);
 }
 
-//-------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------
 //	Drawing Scene (and auxiliary functions)
 //-------------------------------------------------------------------------------
 unsigned int getClosestPowerOfTwo(unsigned int n) {
@@ -182,8 +180,8 @@ GLuint initTexture(void** buf, int& width, int& height) {
 	*buf = new unsigned char[width*height*4];
 	
 	glBindTexture(GL_TEXTURE_2D, texID);
-	glTexParametri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParametri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 	return texID;
 }
@@ -213,20 +211,19 @@ void drawTexture(float left, float top, float right, float bottom) {
 
 void printString(void* font, char *str) {
 	int l = strlen(str);
-	for(int i = 0; i < l, i++) {
+	for(int i = 0; i < l; i++) {
 		glutBitmapCharacter(font, *str++);
 	}
 }
 
-void drawLimb(XnUserID person, XnSkeletonJoint joint1, XnSkeletonJoint, joint2) {
+void drawLimb(XnUserID person, XnSkeletonJoint joint1, XnSkeletonJoint joint2) {
 	// Exit if the person's skeleton is not being tracked
 	if(!_userGenerator.GetSkeletonCap().IsTracking(person)) return;
 	
-	SkeletonCapability skeleton;
+	SkeletonCapability 	skeleton = _userGenerator.GetSkeletonCap();
 	XnSkeletonJointPosition pos1, pos2;
 	
 	// Get joint positions
-	skeleton = _userGenerator.GetSkeletonCap();
 	skeleton.GetSkeletonJointPosition(person, joint1, pos1);
 	skeleton.GetSkeletonJointPosition(person, joint2, pos2);
 	// If position confidence is too low, return
@@ -319,7 +316,7 @@ void DrawDepthMap(const DepthMetaData& dmd, const SceneMetaData& smd) {
 			destImage[1] = 0;
 			destImage[2] = 0;
 			depth++;
-			labelse++;
+			labels++;
 			destImage+=3;
 		}
 	}
@@ -339,7 +336,7 @@ void DrawDepthMap(const DepthMetaData& dmd, const SceneMetaData& smd) {
 	char strLabel[50] = "";
 	XnUInt16 numUsers = 15;
 	XnUserID users[numUsers];
-	_userGenerator.getUsers(users, numUsers);
+	_userGenerator.GetUsers(users, numUsers);
 	
 	for(int i = 0; i < numUsers; i++) {
 		// Display labels
@@ -350,7 +347,7 @@ void DrawDepthMap(const DepthMetaData& dmd, const SceneMetaData& smd) {
 			
 			xnOSMemSet(strLabel, 0, sizeof(strLabel));
 			if(_printState) {
-				char[20] position;
+				char position[25];
 				getPositionString(users[i], position); 
 				sprintf(strLabel, "%d - %s", users[i], position);
 			} else {
