@@ -21,6 +21,9 @@
 #include <XnCppWrapper.h>
 #include "../includes/monitor.h"
 
+// Use OpenNI's xn namespace
+using namespace xn;
+
 //-------------------------------------------------------------------------------
 //	Macros
 //-------------------------------------------------------------------------------
@@ -47,7 +50,7 @@ void LoadCalibration(XnUserID user) {
 	if(_userGenerator.GetSkeletonCap().IsCalibrated(user)) return;
 		
 	// Load Calibration File
-	XnStatus stat = _userGenerator.GetSkeletopCap().
+	XnStatus stat = _userGenerator.GetSkeletonCap().
 		LoadCalibrationDataFromFile(user, CALIBRATION_FILE);
 		
 	// Start Tracking
@@ -60,7 +63,7 @@ Position getPosition(XnUserID user) {
 	XnSkeletonJointPosition headPos, torsoPos, leftPos, rightPos;
 	double head, torso, left, right;
 	Position position = UNKNOWN;
-	xn::SkeletonCapability skeleton = _userGenerator.GetSkeletonCap();
+	SkeletonCapability skeleton = _userGenerator.GetSkeletonCap();
 	
 	// Get Joint positions
 	skeleton.GetJointPosition(user, XN_SKEL_HEAD, headPos);
@@ -89,14 +92,14 @@ Position getPosition(XnUserID user) {
 }
 
 /* Callbacks */
-void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, 
+void XN_CALLBACK_TYPE User_NewUser(UserGenerator& generator, 
 	XnUserID nID, void* pCookie) {
 	// New User has entered the scene
 	printf("Person recognized.\tID: %d\n",nId);
 	LoadCalibration(nId);
 }
 
-void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& generator,
+void XN_CALLBACK_TYPE User_LostUser(UserGenerator& generator,
 	XnUserID nId, void* pCookie) {
 	// User has exited the scene
 	printf("Person lost.\tID: %d\n", nId);
@@ -107,7 +110,7 @@ void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& generator,
 //-------------------------------------------------------------------------------
 int main(int argc, char **argv) {
 	XnStatus status;
-	xn::EnumerationErrors errors;
+	EnumerationErrors errors;
 	XnCallbackHandle userCallbacks;
 	
 	// Setup context
