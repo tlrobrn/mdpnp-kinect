@@ -19,7 +19,7 @@
 #include <XnOS.h>
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
-#include "monitor.h"
+#include "../includes/monitor.h"
 
 //-------------------------------------------------------------------------------
 //	Macros
