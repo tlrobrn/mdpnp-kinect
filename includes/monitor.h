@@ -45,7 +45,6 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 class KinectMonitor {
     private:
         // Member variables
-        Player          person;
         Position        previous, current;
     
     public:

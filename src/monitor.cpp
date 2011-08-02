@@ -32,6 +32,7 @@ using namespace xn;
     ScriptNode      scriptNode;
     DepthGenerator  depthGenerator;
     UserGenerator   userGenerator;
+    XnFPSData		xnFPS;
     bool            quit;
 
 //-------------------------------------------------------------------------------
@@ -67,6 +68,7 @@ void XN_CALLBACK_TYPE lostUser(UserGenerator &generator,
 
 // Signal Handler
 void stop(int signal) {
+	printf("\n");
     quit = true;
 }
 
@@ -87,7 +89,7 @@ KinectMonitor::KinectMonitor() {
         errors.ToString(strError, 1024);
         printf("%s\n", strError);
         
-        exit(status);
+        return;
     } else if( status != XN_STATUS_OK ) {
         printf("Could not initialize Context: %s\n", xnGetStatusString(status));
         
@@ -96,7 +98,7 @@ KinectMonitor::KinectMonitor() {
     
     // Setup Depth Generator
     status = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depthGenerator);
-	CHECK_RC(status, "Find depth generator");
+	//CHECK_RC(status, "Find depth generator");
 	
 	// Setup User Generator
 	status = context.FindExistingNode(XN_NODE_TYPE_USER, userGenerator);
@@ -104,6 +106,10 @@ KinectMonitor::KinectMonitor() {
 		status = userGenerator.Create(context);
 		CHECK_RC(status, "Find user generator");
 	}
+	
+	// Set FPS
+	status = xnFPSInit(&xnFPS, 180);
+	//CHECK_RC(status, "FPS Init");
 	
 	// Setup Skeletal Mapping
 	if( !userGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON) ) {
@@ -129,13 +135,14 @@ KinectMonitor::~KinectMonitor() {
     scriptNode.Release();
     depthGenerator.Release();
     userGenerator.Release();
-    person.Release();
     context.Release();
 }
         
 // Get data
 void KinectMonitor::run() {
     XnStatus status;
+    SceneMetaData scene;
+	DepthMetaData depth;
     
     // Start the device
     status = context.StartGeneratingAll();
@@ -145,10 +152,19 @@ void KinectMonitor::run() {
     while( !quit ) {
         // Wait for incoming data
         context.WaitOneUpdateAll(depthGenerator);
+        xnFPSMarkFrame(&xnFPS);
+        depthGenerator.GetMetaData(depth);
+        
+        XnUInt16 numUsers = 15;
+		XnUserID users[numUsers];
+		userGenerator.GetUsers(users, numUsers);
+		if( numUsers != 1) continue;
+        
+		userGenerator.GetUserPixels(users[0], scene);
         
         // Update patient position
         previous = current;
-        current = getPosition(0);
+        current = getPosition(users[0]);
         
         if( previous != current ) {
             if( current == TURNED ) {
