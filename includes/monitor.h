@@ -36,7 +36,7 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 #define CHECK_RC(status, what)										\
 	if(status != XN_STATUS_OK) {									\
 		printf("%s failed: %s\n", what, xnGetStatusString(status));	\
-		return status;												\
+		return;												\
 	}
 
 //-------------------------------------------------------------------------------
@@ -45,13 +45,8 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 class KinectMonitor {
     private:
         // Member variables
-        Context         context;
-        ScriptNode      scriptNode;
-        DepthGenerator  depthGenerator;
-        UserGenerator   userGenerator;
         Player          person;
         Position        previous, current;
-        bool            quit;
     
     public:
         // Constructors
@@ -59,22 +54,9 @@ class KinectMonitor {
         // Destructors
         ~KinectMonitor();
         
-        // Setup
-        void loadCalibration(XnUserID user);
-        
         // Get data
         void run();
         Position getPosition(XnUserID user);
-        
-        // Callbacks
-        void XN_CALLBACK_TYPE foundUser(UserGenerator &generator,
-            XnUserID nID, void *pCookie);
-        void XN_CALLBACK_TYPE lostUser(UserGenerator &generator,
-            XnUserID nID, void *pCookie);
-        
-        // Signal Handlers
-        void quit(int signal);
 };
-
 //-------------------------------------------------------------------------------
 #endif

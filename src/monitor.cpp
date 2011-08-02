@@ -25,6 +25,55 @@
 // Use OpenNI's xn namespace
 using namespace xn;
 
+//-------------------------------------------------------------------------------
+//	Globals
+//-------------------------------------------------------------------------------
+    Context         context;
+    ScriptNode      scriptNode;
+    DepthGenerator  depthGenerator;
+    UserGenerator   userGenerator;
+    bool            quit;
+
+//-------------------------------------------------------------------------------
+//	Callbacks/Handlers/Auxiliary
+//-------------------------------------------------------------------------------
+
+void loadCalibration(XnUserID user) {
+    if( userGenerator.GetSkeletonCap().IsCalibrated(user) ) return;
+    
+    // Load file
+    XnStatus status = userGenerator.GetSkeletonCap().
+        LoadCalibrationDataFromFile(user, CALIBRATION_FILE);
+    
+    // Start tracking
+    if( status == XN_STATUS_OK )
+        userGenerator.GetSkeletonCap().StartTracking(user);
+    
+    printf("CALIBRATED\n");
+}
+
+// Callbacks
+void XN_CALLBACK_TYPE foundUser(UserGenerator &generator,
+    XnUserID nID, void *pCookie) {
+    
+    printf("NEW PERSON\n");
+    loadCalibration(nID);
+}
+void XN_CALLBACK_TYPE lostUser(UserGenerator &generator,
+    XnUserID nID, void *pCookie) {
+    
+    printf("PERSON LEFT\n");
+}
+
+// Signal Handler
+void stop(int signal) {
+    quit = true;
+}
+
+//-------------------------------------------------------------------------------
+//	Class Methods
+//-------------------------------------------------------------------------------
+
 // Constructors
 KinectMonitor::KinectMonitor() {
     XnStatus status;
@@ -35,14 +84,14 @@ KinectMonitor::KinectMonitor() {
     status = context.InitFromXmlFile(CONTEXT_XML, scriptNode, &errors);
     if( status == XN_STATUS_NO_NODE_PRESENT ) {
         XnChar strError[1024];
-        errors.ToString(stdError, 1024);
+        errors.ToString(strError, 1024);
         printf("%s\n", strError);
         
         exit(status);
     } else if( status != XN_STATUS_OK ) {
         printf("Could not initialize Context: %s\n", xnGetStatusString(status));
         
-        exit(status);
+        return;
     }
     
     // Setup Depth Generator
@@ -57,16 +106,16 @@ KinectMonitor::KinectMonitor() {
 	}
 	
 	// Setup Skeletal Mapping
-	if( !userGenerator.IsCapibilitySupported(XN_CAPABILITY_SKELETON) ) {
+	if( !userGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON) ) {
 		printf("Skeletal mapping not supported.\n");
 		
-		exit(1);
+		return;
 	}
 	userGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_UPPER);
 	
 	// Register Callbacks
 	status = userGenerator.RegisterUserCallbacks(
-	    this.foundUser, this.lostUser, NULL, userCallbacks
+	    foundUser, lostUser, NULL, userCallbacks
 	);
 	
 	// Register Handlers
@@ -84,26 +133,13 @@ KinectMonitor::~KinectMonitor() {
     context.Release();
 }
         
-// Setup
-void KinectMonitor::loadCalibration(XnUserID user) {
-    if( userGenerator.GetSkeletonCap().IsCalibrated(user) ) return;
-    
-    // Load file
-    XnStatus status = userGenerator.GetSkeletonCap().
-        LoadCalibrationDataFromFile(user, CALIBRATION_FILE);
-    
-    // Start tracking
-    if( status == XN_STATUS_OK )
-        userGenerator.GetSkeletonCap().StartTracking(user);
-}
-        
 // Get data
 void KinectMonitor::run() {
     XnStatus status;
     
     // Start the device
     status = context.StartGeneratingAll();
-    CHECK_RC(status, "StartGenerating");
+    //CHECK_RC(status, "StartGenerating");
     
     // Running loop
     while( !quit ) {
@@ -117,8 +153,10 @@ void KinectMonitor::run() {
         if( previous != current ) {
             if( current == TURNED ) {
                 // Patient is turned
-                printf("Patient getting out of bed.");
-            }
+                printf("Patient getting out of bed.\n");
+            } else if( current == LAYING ) {
+				printf("Patient is laying down.\n");
+			}
         }
     }
 }
@@ -153,22 +191,4 @@ Position KinectMonitor::getPosition(XnUserID user) {
 	}
 	
 	return position;
-}
-        
-// Callbacks
-void XN_CALLBACK_TYPE KinectMonitor::foundUser(UserGenerator &generator,
-    XnUserID nID, void *pCookie) {
-    
-    printf("NEW PERSON\n");
-    loadCalibration(nId);
-}
-void XN_CALLBACK_TYPE KinectMonitor::lostUser(UserGenerator &generator,
-    XnUserID nID, void *pCookie) {
-    
-    printf("PERSON LEFT");
-}
-
-// Signal Handler
-void KinectMonitor::stop(int signal) {
-    quit = true;
 }
