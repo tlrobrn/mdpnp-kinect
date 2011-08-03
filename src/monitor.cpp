@@ -19,6 +19,7 @@
 #include <XnOS.h>
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
+#include <XnFPSCalculator.h>
 #include <signal.h>
 #include "../includes/monitor.h"
 

@@ -28,8 +28,8 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 //-------------------------------------------------------------------------------
 //	Macros
 //-------------------------------------------------------------------------------
-#define CONTEXT_XML			"../config/config.xml"
-#define CALIBRATION_FILE	"../config/calibration.bin"
+#define CONTEXT_XML			"config/config.xml"
+#define CALIBRATION_FILE	"config/calibration.bin"
 #define LAYING_TOLERANCE	200
 #define TURNED_TOLERANCE	150
 

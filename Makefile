@@ -1,28 +1,38 @@
-OSTYPE := $(shell uname -s)
+PROGRAM = MDPnP-KinectMonitor
 
-BIN_DIR = ../
+INCLUDEDIRS =	\
+	-I./includes		\
+	-I/usr/include/ni
 
-INC_DIRS = /home/tobrien/Developer/kinect/OpenNI/Include /usr/include/ni ../includes
+LIBDIRS = -L/usr/lib
 
-SRC_FILES = \
-	src/monitor.cpp \
+LIBS = -lOpenNI
 
-EXE_NAME = MDPnP-KinectMonitor
+CPPSOURCES =	\
+	main.cpp		\
+	src/monitor.cpp
 
-ifneq "$(GLES)" "1"
-ifeq ("$(OSTYPE)","Darwin")
-	LDFLAGS += -framework OpenGL -framework GLUT
-else
-	USED_LIBS += glut
-endif
-else
-	DEFINES += USE_GLES
-	USED_LIBS += GLES_CM IMGegl srv_um
-	SRC_FILES += opengles.cpp
-endif
+CPPOBJECTS =	\
+	bin/main.o	\
+	bin/monitor.o
 
-USED_LIBS += OpenNI
+CPPFLAGS = -DESRI_UNIX $(INCLUDEDIRS)
 
-LIB_DIRS += /home/tobrien/Developer/kinect/OpenNI/Lib
-include /home/tobrien/Developer/kinect/OpenNI/Include/CommonCppMakefile
+CPP = g++
 
+LDFLAGS = $(LIBDIRS) $(LIBS)
+
+all:	$(PROGRAM)
+
+$(PROGRAM):	$(CPPOBJECTS)
+	$(CPP) -o $@ $(CPPOBJECTS) $(LDFLAGS)
+
+
+bin/main.o:	main.cpp includes/monitor.h
+	$(CPP) $(CPPFLAGS) -c -o bin/main.o main.cpp
+
+bin/monitor.o:	src/monitor.cpp includes/monitor.h
+	$(CPP) $(CPPFLAGS) -c -o bin/monitor.o src/monitor.cpp
+
+clean:
+	$(RM) $(CPPOBJECTS) $(PROGRAM)
