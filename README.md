@@ -11,7 +11,6 @@ Ubuntu 11.04 Linux-x86 (32-bit)
 
 + mono-complete
 + libusb-1.0-0-dev
-+ freeglut3-dev
 
 ## Libraries ##
 
