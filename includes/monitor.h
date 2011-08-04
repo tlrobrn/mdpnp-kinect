@@ -30,8 +30,9 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 //-------------------------------------------------------------------------------
 #define CONTEXT_XML			"config/config.xml"
 #define CALIBRATION_FILE	"config/calibration.bin"
-#define LAYING_TOLERANCE	200
+#define LAYING_TOLERANCE	100
 #define TURNED_TOLERANCE	150
+#define BED_TOLERANCE		400
 
 #define CHECK_RC(status, what)										\
 	if(status != XN_STATUS_OK) {									\
@@ -45,7 +46,9 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 class KinectMonitor {
     private:
         // Member variables
-        Position        previous, current;
+        Position	previous, current;
+        double		bed;
+        bool		out, bedSet;
     
     public:
         // Constructors

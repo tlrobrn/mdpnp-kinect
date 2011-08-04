@@ -50,21 +50,18 @@ void loadCalibration(XnUserID user) {
     // Start tracking
     if( status == XN_STATUS_OK )
         userGenerator.GetSkeletonCap().StartTracking(user);
-    
-    printf("CALIBRATED\n");
+
 }
 
 // Callbacks
 void XN_CALLBACK_TYPE foundUser(UserGenerator &generator,
     XnUserID nID, void *pCookie) {
     
-    printf("NEW PERSON\n");
     loadCalibration(nID);
 }
 void XN_CALLBACK_TYPE lostUser(UserGenerator &generator,
     XnUserID nID, void *pCookie) {
     
-    printf("PERSON LEFT\n");
 }
 
 // Signal Handler
@@ -99,7 +96,6 @@ KinectMonitor::KinectMonitor() {
     
     // Setup Depth Generator
     status = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depthGenerator);
-	//CHECK_RC(status, "Find depth generator");
 	
 	// Setup User Generator
 	status = context.FindExistingNode(XN_NODE_TYPE_USER, userGenerator);
@@ -110,7 +106,6 @@ KinectMonitor::KinectMonitor() {
 	
 	// Set FPS
 	status = xnFPSInit(&xnFPS, 180);
-	//CHECK_RC(status, "FPS Init");
 	
 	// Setup Skeletal Mapping
 	if( !userGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON) ) {
@@ -130,6 +125,7 @@ KinectMonitor::KinectMonitor() {
 	signal(SIGTERM, &stop);
 	signal(SIGINT, &stop);
 	quit = false;
+	out = true;
 }
 // Destructors
 KinectMonitor::~KinectMonitor() {
@@ -147,8 +143,7 @@ void KinectMonitor::run() {
     
     // Start the device
     status = context.StartGeneratingAll();
-    //CHECK_RC(status, "StartGenerating");
-    
+
     // Running loop
     while( !quit ) {
         // Wait for incoming data
@@ -168,19 +163,17 @@ void KinectMonitor::run() {
         current = getPosition(users[0]);
         
         if( previous != current ) {
-            if( current == TURNED ) {
+            if( current == TURNED && out == false ) {
                 // Patient is turned
                 printf("Patient getting out of bed.\n");
-            } else if( current == LAYING ) {
-				printf("Patient is laying down.\n");
-			}
+            }
         }
     }
 }
 
 Position KinectMonitor::getPosition(XnUserID user) {
     XnSkeletonJointPosition headPos, torsoPos, leftPos, rightPos;
-	double head, torso, left, right;
+	double head, torso, center, left, right;
 	Position position = UNKNOWN;
 	SkeletonCapability skeleton = userGenerator.GetSkeletonCap();
 	
@@ -192,12 +185,14 @@ Position KinectMonitor::getPosition(XnUserID user) {
 	
 	head	= headPos.position.Z;
 	torso	= torsoPos.position.Z;
+	center	= torsoPos.position.X;
 	left	= leftPos.position.Z;
 	right	= rightPos.position.Z;
 	
 	// Determine defined position
 	if(head - LAYING_TOLERANCE > torso) {
 		position = LAYING;
+		out = false;
 		
 	} else if(	left < right - TURNED_TOLERANCE || 
 				left > right + TURNED_TOLERANCE	) {
@@ -205,6 +200,15 @@ Position KinectMonitor::getPosition(XnUserID user) {
 		
 	} else {
 		position = FORWARD;
+	}
+	
+	// Set/Check the patient vs the bed location
+	if( (!bedSet) && position == LAYING ) {
+		bed = center;
+		bedSet = true;
+		
+	} else if( bedSet ) {
+		out = ( center < bed - BED_TOLERANCE || center > bed + BED_TOLERANCE );
 	}
 	
 	return position;
