@@ -30,15 +30,10 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 //-------------------------------------------------------------------------------
 #define CONTEXT_XML			"config/config.xml"
 #define CALIBRATION_FILE	"config/calibration.bin"
+#define DEFAULT_TILT			-30
 #define LAYING_TOLERANCE	100
 #define TURNED_TOLERANCE	150
 #define BED_TOLERANCE		400
-
-#define CHECK_RC(status, what)										\
-	if(status != XN_STATUS_OK) {									\
-		printf("%s failed: %s\n", what, xnGetStatusString(status));	\
-		return;												\
-	}
 
 //-------------------------------------------------------------------------------
 //  Class Definition
@@ -52,7 +47,9 @@ class KinectMonitor {
     
     public:
         // Constructors
-        KinectMonitor();
+        KinectMonitor(int *tilt);
+        KinectMonitor(){KinectMonitor(NULL);}
+        
         // Destructors
         ~KinectMonitor();
         

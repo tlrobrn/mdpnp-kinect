@@ -14,14 +14,27 @@
 //-------------------------------------------------------------------------------
 //	Includes
 //-------------------------------------------------------------------------------
+#include <stdint.h>
 #include <XnOpenNI.h>
 #include <XnTypes.h>
 #include <XnOS.h>
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
 #include <XnFPSCalculator.h>
+#include <XnUSB.h>
 #include <signal.h>
 #include "../includes/monitor.h"
+
+//-------------------------------------------------------------------------------
+//	Macros
+//-------------------------------------------------------------------------------
+#define VID_MICROSOFT	0x45e
+#define PID_NUI_MOTOR	0x02b0
+#define CHECK_RC(status, what)										\
+	if(status != XN_STATUS_OK) {									\
+		printf("%s failed: %s\n", what, xnGetStatusString(status));	\
+		return;												\
+	}
 
 // Use OpenNI's xn namespace
 using namespace xn;
@@ -81,7 +94,7 @@ void stop(int signal) {
 //-------------------------------------------------------------------------------
 
 // Constructors
-KinectMonitor::KinectMonitor() {
+KinectMonitor::KinectMonitor(int *tilt) {
     XnStatus status;
     EnumerationErrors errors;
     XnCallbackHandle userCallbacks;
@@ -120,6 +133,16 @@ KinectMonitor::KinectMonitor() {
 		return;
 	}
 	userGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_UPPER);
+	
+	// Tilt camera
+	XN_USB_DEV_HANDLE dev;
+	int angle = (tilt == NULL)? DEFAULT_TILT : *tilt;
+	status = xnUSBOpenDevice(VID_MICROSOFT, PID_NUI_MOTOR, NULL, NULL, &dev);
+	uint8_t empty[0x1];
+	status = xnUSBSendControl(
+		dev, XN_USB_CONTROL_TYPE_VENDOR, 0x31, (XnUInt16)angle,
+		0x0, empty, 0x0, 0
+	);
 	
 	// Register Callbacks
 	status = userGenerator.RegisterUserCallbacks(
