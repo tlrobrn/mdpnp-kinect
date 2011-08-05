@@ -62,6 +62,12 @@ void XN_CALLBACK_TYPE foundUser(UserGenerator &generator,
 void XN_CALLBACK_TYPE lostUser(UserGenerator &generator,
     XnUserID nID, void *pCookie) {
     
+    XnUInt16 numUsers = 15;
+	XnUserID users[numUsers];
+	userGenerator.GetUsers(users, numUsers);
+	if( numUsers <= 1) {
+		printf("Patient not tracked.\n");
+	}
 }
 
 // Signal Handler
@@ -166,7 +172,9 @@ void KinectMonitor::run() {
             if( current == TURNED && out == false ) {
                 // Patient is turned
                 printf("Patient getting out of bed.\n");
-            }
+            } else if( out && bedSet ) {
+				printf("Patient is out of bed.\n");
+			}
         }
     }
 }
