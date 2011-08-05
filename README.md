@@ -44,7 +44,6 @@ These instructions are for Ubuntu, but they should work verbatim for any Linux p
         $ sudo apt-get update
         $ sudo apt-get install mono-complete
         $ sudo apt-get install libusb-1.0-0-dev
-        $ sudo apt-get install freeglut3-dev
 
 5. Create the directory /var/lib/ni
 
