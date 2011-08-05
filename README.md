@@ -70,3 +70,18 @@ These instructions are for Ubuntu, but they should work verbatim for any Linux p
         $ cd ../Redist
         $ sudo ./install.sh
 
+## Build and Run ##
+
+To build the project, go to the base directory of the MDPnP-KinectMonitor (it will contain the Makefile) and run make.
+
+	$ make
+
+This will compile the project.  There should now be an executable called MDPnP-KinectMonitor in the base directory (as well as object files located in the bin/ directory).
+
+To run the project, it must be run with sudo priviledges to adjust the camera.  There is also an optional angle argument (just an int) that specifies the tilt of the camera.
+
+	$ sudo ./MDPnP-KinectMonitor <angle>
+
+You can also run it without an angle and it will be set to the default tilt.
+
+	$ sudo ./MDPnP-KinectMonitor
