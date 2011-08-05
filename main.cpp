@@ -20,12 +20,22 @@
 //	Main
 //-------------------------------------------------------------------------------
 int main(int argc, char **argv) {
-    KinectMonitor *monitor = new KinectMonitor();
+	// Get the desired tilt if there is one
+	int *tilt;
+	if( argc == 1 )
+		tilt = NULL;
+	else
+		tilt = new int( atoi(argv[1]) );
+	
+	// Initialize the KinectMonitor
+    KinectMonitor *monitor = new KinectMonitor(tilt);
     
     // Run the Kinect Monitor
     monitor->run();
     
+    // Free up memory
     delete monitor;
+    if(tilt != NULL) delete tilt;
     
     return 0;
 }
