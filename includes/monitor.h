@@ -28,11 +28,21 @@ enum Position {LAYING, TURNED, FORWARD, UNKNOWN};
 //-------------------------------------------------------------------------------
 //	Macros
 //-------------------------------------------------------------------------------
+
+// Location of the file for loading the Context
 #define CONTEXT_XML			"config/config.xml"
+// Location of the file for loading skeletal calibrations
 #define CALIBRATION_FILE	"config/calibration.bin"
+// The default tilt value (good for approximately 6ft off the floor)
 #define DEFAULT_TILT			-30
+// The difference between the head and torso Z coordinate that is allowed before
+// the patient would be considered as "laying down"
 #define LAYING_TOLERANCE	100
+// The difference between the left and right shoulder joint Z coordinates before
+// the patient would be considered turning (enough to get out of bed)
 #define TURNED_TOLERANCE	150
+// The distance the patient can move in the X direction before he is considered
+// to be out of the hospital bed
 #define BED_TOLERANCE		400
 
 //-------------------------------------------------------------------------------

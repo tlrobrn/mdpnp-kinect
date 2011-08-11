@@ -28,14 +28,14 @@ int main(int argc, char **argv) {
 		tilt = new int( atoi(argv[1]) );
 	
 	// Initialize the KinectMonitor
-    KinectMonitor *monitor = new KinectMonitor(tilt);
+	KinectMonitor *monitor = new KinectMonitor(tilt);
     
-    // Run the Kinect Monitor
-    monitor->run();
+  // Run the Kinect Monitor
+  monitor->run();
     
-    // Free up memory
-    delete monitor;
-    if(tilt != NULL) delete tilt;
+  // Free up memory
+  delete monitor;
+  if(tilt != NULL) delete tilt;
     
-    return 0;
+  return 0;
 }
