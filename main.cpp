@@ -21,21 +21,15 @@
 //-------------------------------------------------------------------------------
 int main(int argc, char **argv) {
 	// Get the desired tilt if there is one
-	int *tilt;
+	char* tilt;
 	if( argc == 1 )
-		tilt = NULL;
+		tilt = nullptr;
 	else
-		tilt = new int( atoi(argv[1]) );
+		tilt = argv[1];
 	
 	// Initialize the KinectMonitor
-	KinectMonitor *monitor = new KinectMonitor(tilt);
+	KinectMonitor monitor(tilt);
     
-  // Run the Kinect Monitor
-  monitor->run();
-    
-  // Free up memory
-  delete monitor;
-  if(tilt != NULL) delete tilt;
-    
-  return 0;
+	// Run the Kinect Monitor
+	monitor.run();
 }

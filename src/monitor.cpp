@@ -155,7 +155,7 @@ void stop(int signal) {
  *		int*	tilt	-	A pointer to the desired tilt angle of the camera.
  *									If it is NULL, the default value is used.
  */
-KinectMonitor::KinectMonitor(int *tilt) {
+KinectMonitor::KinectMonitor(char *tilt) {
     XnStatus status;
     EnumerationErrors errors;
     XnCallbackHandle userCallbacks;
@@ -206,7 +206,7 @@ KinectMonitor::KinectMonitor(int *tilt) {
 	// because it requires writing to the usb device.
 	XN_USB_DEV_HANDLE dev;
 	// Sets the angle to either the DEFAULT_TILT (defined in monitor.h) or the given tilt.
-	int angle = (tilt == NULL)? DEFAULT_TILT : *tilt;
+	int angle = (tilt == nullptr)? DEFAULT_TILT : atoi(tilt);
 	// Open the kinect usb device
 	status = xnUSBOpenDevice(VID_MICROSOFT, PID_NUI_MOTOR, NULL, NULL, &dev);
 	// Send the proper code to the usb device to set the angle.

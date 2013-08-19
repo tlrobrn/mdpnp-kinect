@@ -57,8 +57,7 @@ class KinectMonitor {
     
     public:
         // Constructors
-        KinectMonitor(int *tilt);
-        KinectMonitor(){KinectMonitor(NULL);}
+        KinectMonitor(char* tilt);
         
         // Destructors
         ~KinectMonitor();
